@@ -2,7 +2,8 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :rooms, only: [:index, :show, :new, :create]
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  post 'rooms/:id/join', to: 'room_players#join', as: 'join_room'
+
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
@@ -15,6 +16,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   root "rooms#index"
+
   #Use Cable for channels multiplayer
   mount ActionCable.server => '/cable'
 end
