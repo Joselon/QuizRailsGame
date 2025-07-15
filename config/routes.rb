@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  resources :rooms, only: [:index, :show, :new, :create]
-  post 'rooms/:id/join', to: 'room_players#join', as: 'join_room'
+  resources :rooms, only: [ :index, :show, :new, :create ]
+  post "rooms/:id/join", to: "room_players#join", as: "join_room"
 
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -17,6 +17,6 @@ Rails.application.routes.draw do
   # root "posts#index"
   root "rooms#index"
 
-  #Use Cable for channels multiplayer
-  mount ActionCable.server => '/cable'
+  # Use Cable for channels multiplayer
+  mount ActionCable.server => "/cable"
 end

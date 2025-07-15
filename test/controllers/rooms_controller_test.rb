@@ -24,13 +24,13 @@ class RoomsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-#  test "should create room" do
-#    assert_difference("Room.count") do
-#      post rooms_url, params: {
-#        room: {name: "Sala de prueba", status: "waiting", current_turn: 0 }
-#      }
-#    end
+  #  test "should create room" do
+  #    assert_difference("Room.count") do
+  #      post rooms_url, params: {
+  #        room: {name: "Sala de prueba", status: "waiting", current_turn: 0 }
+  #      }
+  #    end
 
-#    assert_redirected_to_room_url(Room.last)
-#  end
+  #    assert_redirected_to_room_url(Room.last)
+  #  end
 end
