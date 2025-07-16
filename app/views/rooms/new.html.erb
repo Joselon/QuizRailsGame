@@ -5,6 +5,6 @@
     <%= form.label :name %>
     <%= form.text_field :name %>
   </div>
-  <%= form.hidden_field :status, value: 'waiting' %>
+  <%= form.hidden_field :status, value: :waiting %>
   <%= form.submit 'Crear sala' %>
 <% end %>

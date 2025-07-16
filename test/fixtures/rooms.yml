@@ -2,10 +2,10 @@
 
 one:
   name: MyString1
-  status: waiting
+  status: 0 #waiting
   current_turn: 0
 
 two:
   name: MyString
-  status: MyString
+  status: 1 #playing
   current_turn: 1
