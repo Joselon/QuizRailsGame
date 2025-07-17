@@ -6,6 +6,6 @@ one:
   current_turn: 0
 
 two:
-  name: MyString
-  status: 1 #playing
-  current_turn: 1
+  name: MyString2
+  status: 0 #waiting
+  current_turn: 0
