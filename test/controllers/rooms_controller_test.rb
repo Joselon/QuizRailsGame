@@ -31,4 +31,22 @@ class RoomsControllerTest < ActionDispatch::IntegrationTest
 
    assert_redirected_to room_url(Room.last)
   end
+
+  test "should start room" do
+    @room.update(status: :waiting)
+
+    patch start_room_url(@room)
+    assert_redirected_to room_url(@room)
+    @room.reload
+    assert_equal "playing", @room.status
+  end
+
+  test "should finish room" do
+    @room.update(status: :playing)
+
+    patch finish_room_url(@room)
+    assert_redirected_to room_url(@room)
+    @room.reload
+    assert_equal "finished", @room.status
+  end
 end

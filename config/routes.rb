@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  resources :rooms, only: [ :index, :show, :new, :create ]
+  resources :rooms, only: [ :index, :show, :new, :create ] do
+    member do
+      patch :start
+      patch :finish
+    end
+  end
   post "rooms/:id/join", to: "room_players#join", as: "join_room"
 
 

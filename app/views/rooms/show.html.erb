@@ -1,5 +1,11 @@
 <h1>Sala: <%= @room.name %></h1>
-<p>Estado; <%= @room.status %></p>
+<p>Estado: <%= @room.status %></p>
+
+<% if @room.waiting? %>
+  <%= button_to "Empezar partida", start_room_path(@room), method: :patch, data: { turbo_confirm: "Empezar partida?" } %>
+<% elsif @room.playing? %>
+  <%= button_to "Finalizar partida", finish_room_path(@room), method: :patch, data: {turbo_confirm: "Finalizar partida?" } %>
+<% end %>
 
 <h2>Jugadores</h2>
 <ul>
@@ -11,3 +17,5 @@
 <% unless @room.room_players.exists?(user_id: current_user.id) %>
   <%= button_to 'Unirme a esta sala', join_room_path(@room), method: :post %>
 <% end %>
+
+<div>                                               <%= link_to "Volver a Salas", rooms_path %>     </div>
