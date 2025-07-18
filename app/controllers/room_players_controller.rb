@@ -1,5 +1,6 @@
 class RoomPlayersController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_room_player, only: [:roll_dice]
 
   def join
     room = Room.find(params[:id])
@@ -10,5 +11,19 @@ class RoomPlayersController < ApplicationController
     end
 
     redirect_to room_path(room)
+  end
+
+  def roll_dice
+    DiceRollService.new(@room_player.room).roll_for(@room_player)
+    respond_to do |format|
+      format.js
+      format.html { redirect_to @room_player.room }
+    end
+  end
+
+  private
+
+  def set_room_player
+    @room_player = RoomPlayer.find(params[:id])
   end
 end

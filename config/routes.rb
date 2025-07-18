@@ -6,6 +6,12 @@ Rails.application.routes.draw do
       patch :start
       patch :finish
     end
+
+    resources :room_players, only: [] do
+      member do
+        patch :roll_dice
+      end
+    end
   end
   post "rooms/:id/join", to: "room_players#join", as: "join_room"
 

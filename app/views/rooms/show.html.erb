@@ -10,7 +10,21 @@
 <h2>Jugadores</h2>
 <ul>
   <% @room.room_players.includes(:user).each do |rp| %>
-    <li><%= rp.user.name %> - Puntos: <%= rp.score %></li>
+    <li><%= rp.user.name %> 
+    <% if @room.rolling_for_order? %>
+      <%= button_to "Tirar dado",
+      roll_dice_room_room_player_path(@room, rp),
+      method: :patch,
+      remote: true,
+      id: "roll-dice-btn-#{rp.id}" %>
+    <div id="dice-result-<%= rp.id %>">
+      <% if rp.dice_roll.present? %>
+      Dado <%= rp.dice_roll %>
+      <% end %>
+    </div>
+  <% end %>
+    - Turno: <%= rp.turn_order %>
+    - Puntos: <%= rp.score %></li>
   <% end %>
 </ul>
 

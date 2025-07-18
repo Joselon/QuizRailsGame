@@ -25,7 +25,7 @@ class RoomsController < ApplicationController
 
   def start
     if @room.waiting?
-      @room.playing!
+      @room.update(status: :rolling_for_order)
     end
     redirect_to @room
   end

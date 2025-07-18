@@ -1,0 +1,6 @@
+const container = document.getElementById("dice-result-<%= @room_player.id %>");
+container.innerHTML = "<img src='/assets/images/dice_roll.gif' alt='Rolling...' />";
+
+setTimeout(function() {
+  container.innerHTML = "<strong> Dado <%= @room_player.dice_roll %></strong>";
+}, 3000);
