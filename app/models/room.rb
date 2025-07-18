@@ -6,5 +6,5 @@ class Room < ApplicationRecord
                   finished: 4 }
   has_many :room_players
   has_many :users, through: :room_players
-  has_many :turns 
+  has_many :turns
 end

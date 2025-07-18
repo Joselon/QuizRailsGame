@@ -38,7 +38,7 @@ class RoomsControllerTest < ActionDispatch::IntegrationTest
     patch start_room_url(@room)
     assert_redirected_to room_url(@room)
     @room.reload
-    assert_equal "playing", @room.status
+    assert_equal "rolling_for_order", @room.status
   end
 
   test "should finish room" do

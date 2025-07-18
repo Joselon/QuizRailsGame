@@ -1,6 +1,6 @@
 class RoomPlayersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_room_player, only: [:roll_dice]
+  before_action :set_room_player, only: [ :roll_dice ]
 
   def join
     room = Room.find(params[:id])
