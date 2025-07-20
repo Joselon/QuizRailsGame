@@ -10,14 +10,37 @@ class RoomPlayersController < ApplicationController
       room.room_players.create(user: current_user, score: 0, turn_order: turn_order)
     end
 
-    redirect_to room_path(room)
+    Turbo::StreamsChannel.broadcast_replace_to(
+          "room_#{room.id}",
+          target: "players",
+           partial: "rooms/players_list",
+          locals: { room: room }
+    )
+
+    respond_to do |format|
+      format.html { redirect_to room_path(room) }
+      format.turbo_stream { head :ok }
+    end
   end
 
   def roll_dice
+    unless @room_player.user == current_user
+      head :forbidden and return
+    end
+
     DiceRollService.new(@room_player.room).roll_for(@room_player)
+
+    Turbo::StreamsChannel.broadcast_replace_to(
+      "room_#{@room_player.room.id}",
+      target: "players",
+      partial: "rooms/players_list",
+      locals: { room: @room_player.room }
+    )
+
     respond_to do |format|
       format.js
       format.html { redirect_to @room_player.room }
+      format.turbo_stream { head :ok }
     end
   end
 

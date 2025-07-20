@@ -1,33 +1,27 @@
+<%= turbo_stream_from "room_#{@room.id}" %>
 <h1>Sala: <%= @room.name %></h1>
 <p>Estado: <%= @room.status %></p>
 
 <% if @room.waiting? %>
   <%= button_to "Empezar partida", start_room_path(@room), method: :patch, data: { turbo_confirm: "Empezar partida?" } %>
+<% elsif @room.rolling_for_order? || @room.tiebreak_for_order? %>
+  <% if @room.tiebreak_for_order? %>
+         <p> Empate entre <%= @room.room_players.where.not(dice_roll: nil).map { |p| p.user.name }.join(", ") %>. Solo ellos vuelven a tirar.</p>
+  <% else %>
+    <% if @room.room_players.all? { |p| p.dice_roll.present? } %>
+       <p> El jugador <%= @room.room_players.find_by(turn_order: @room.current_turn).user.name %> empieza la partida.</p>
+    <% else %>
+       <p> Esperando tiradas de los demas jugadores...</p>
+     <% end %>
+  <% end %>
 <% elsif @room.playing? %>
   <%= button_to "Finalizar partida", finish_room_path(@room), method: :patch, data: {turbo_confirm: "Finalizar partida?" } %>
 <% end %>
 
 <h2>Jugadores</h2>
-<ul>
-  <% @room.room_players.includes(:user).each do |rp| %>
-    <li><%= rp.user.name %> 
-    <% if @room.rolling_for_order? %>
-      <%= button_to "Tirar dado",
-      roll_dice_room_room_player_path(@room, rp),
-      method: :patch,
-      remote: true,
-      id: "roll-dice-btn-#{rp.id}" %>
-    <div id="dice-result-<%= rp.id %>">
-      <% if rp.dice_roll.present? %>
-      Dado <%= rp.dice_roll %>
-      <% end %>
-    </div>
-  <% end %>
-    - Turno: <%= rp.turn_order %>
-    - Puntos: <%= rp.score %></li>
-  <% end %>
-</ul>
-
+<div id="players">
+<%= render :partial => 'players_list', locals: { room: @room } %>
+</div>
 <% unless @room.room_players.exists?(user_id: current_user.id) %>
   <%= button_to 'Unirme a esta sala', join_room_path(@room), method: :post %>
 <% end %>

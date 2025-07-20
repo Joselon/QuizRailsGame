@@ -1,6 +1,10 @@
 <h1>Salas disponibles</h1>
 
-<%= link_to 'Crear nueva sala', new_room_path %>
+<%= image_tag 'dice_roll.gif',
+  alt: 'Rolling...',
+  width: 100,
+height: 100 %>
+<br />
 
 <ul>
   <% @rooms.each do |room| %>
@@ -9,3 +13,5 @@
     </li>
   <% end %>
 </ul>
+<br />
+<%= link_to 'Crear nueva sala', new_room_path %>
