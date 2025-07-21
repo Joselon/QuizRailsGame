@@ -1,0 +1,60 @@
+@startuml domain_model
+' Modelo de dominio para QuizRailsGame
+
+class User {
+  +id: integer
+  +name: string
+  +email: string
+  +role: enum(player, admin)
+}
+
+class Room {
+  +id: integer
+  +name: string
+  +status: enum(waiting, rolling_for_order, tiebreak_for_order, playing, finished)
+  +current_turn: integer
+  +selected_difficulty: integer
+}
+
+class RoomPlayer {
+  +id: integer
+  +score: integer
+  +turn_order: integer
+  +dice_roll: integer
+}
+
+class Turn {
+  +id: integer
+  +answer: string
+  +correct: boolean
+}
+
+class Question {
+  +id: integer
+  +content: string
+  +correct_answer: string
+  +category: string
+  +difficulty: integer
+  +media_url: string
+}
+
+' Services / helper POROs
+class GameManager <<service>>
+class Dice <<utility>>
+class QuestionSelector <<service>>
+
+' Relationships
+User "1" --> "0..*" RoomPlayer : participates
+Room "1" --> "0..*" RoomPlayer : contains
+RoomPlayer "1" --> "0..*" Turn : performs
+Room "1" --> "0..*" Turn : groups
+Question "1" --> "0..*" Turn : used_in
+
+' Service relationships
+GameManager ..> Room
+GameManager ..> RoomPlayer
+GameManager ..> Turn
+GameManager ..> Dice
+QuestionSelector ..> Question
+
+@enduml
