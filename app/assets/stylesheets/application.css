@@ -20,10 +20,21 @@
 }
 
 .players-list {
-	display: flex;
-	gap: 1em;
-	flex-wrap: wrap;
-	margin-bottom: 1em;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.players-list .player-item {
+  background: #f3f4f6;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .player-card {
@@ -46,5 +57,48 @@
 
 .media-content {
 	margin-top: 1em;
+}
+
+.status-panel {
+  background-color: #f0f4ff; /* un azul muy claro */
+  border: 1px solid #cdd9f0;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.status-panel h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  color: #2c3e50;
+  border-bottom: 1px solid #cdd9f0;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.status-panel p {
+  margin: 0.3rem 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Estados específicos */
+.status.waiting {
+  color: #d97706; /* ámbar */
+  font-weight: bold;
+}
+.status.playing {
+  color: #16a34a; /* verde */
+  font-weight: bold;
+}
+.status.finished {
+  color: #dc2626; /* rojo */
+  font-weight: bold;
+}
+.status.rolling_for_order,
+.status.tiebreak_for_order {
+  color: #2563eb; /* azul fuerte */
+  font-weight: bold;
 }
 

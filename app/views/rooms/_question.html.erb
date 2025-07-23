@@ -1,0 +1,19 @@
+<p><strong><% question.text %></strong></p>
+
+<div class="media-content">
+  <% if question.image_url.present? %>
+    <% image_tag question.image_url, style: "max-width: 300px;" %>
+  <% end %>
+
+  <% if question.audio_url.present? %>
+    <audio controls>
+      <source src="<%= question.audio_url %>">
+    </audio>
+  <% end %>
+
+  <% if question.video_url.present? %>
+    <video width="400" controls>
+      <source src="<%= question.video_url %>">
+    </video>
+  <% end %>
+</div>

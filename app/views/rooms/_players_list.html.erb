@@ -1,6 +1,10 @@
 <ul id="players-list">
   <% room.room_players.includes(:user).each do |rp| %>
-    <li><%= rp.user.name %>
+  
+    <li class="player-item player-card <%= 'active' if player == @room.current_player %>">
+     <span class="player-name"><%= rp.user.name %></span>
+     <span class="player-score"> - Puntos: <%= rp.score %></span>
+     <span class="player-turn"> - Turno: <%= rp.turn_order %> -</span>
     <% if room.rolling_for_order? || room.tiebreak_for_order? %>
       <%= button_to "Tirar dado",
         roll_dice_room_room_player_path(room, rp),
@@ -12,8 +16,6 @@
           Dado <%= rp.dice_roll %>
       <% end %>
       </div>
-    <% end %>
-    - Turno: <%= rp.turn_order %>
-  - Puntos: <%= rp.score %></li>
+    <% end %></li>
   <% end %>
 </ul>
