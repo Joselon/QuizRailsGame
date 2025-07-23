@@ -1,4 +1,4 @@
-<h1>Salas disponibles</h1>
+<h1>Salas de Juego</h1>
 
 <%= image_tag 'dice_roll.gif',
   alt: 'Rolling...',
@@ -6,8 +6,10 @@
 height: 100 %>
 <br />
 
+<h2> Salas Activas </h2>
+
 <ul>
-  <% @rooms.each do |room| %>
+  <% @active_rooms.each do |room| %>
     <li>
       <%= link_to room.name, room_path(room) %> - Estado: <%= room.status %>
     </li>
@@ -15,3 +17,15 @@ height: 100 %>
 </ul>
 <br />
 <%= link_to 'Crear nueva sala', new_room_path %>
+
+<br />
+<h2> Salas finalizadas </h2>
+
+<ul>
+  <% @finished_rooms.each do |room|  %>
+    <li>
+      <%= link_to room.name, room_path(room) %>
+    </li>
+  <% end %>
+</ul>
+

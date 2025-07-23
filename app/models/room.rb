@@ -4,7 +4,8 @@ class Room < ApplicationRecord
                   tiebreak_for_order: 2,
                   playing: 3,
                   finished: 4 }
-  has_many :room_players
+
+  has_many :room_players, dependent: :destroy
   has_many :users, through: :room_players
-  has_many :turns
+  has_many :turns, dependent: :destroy
 end

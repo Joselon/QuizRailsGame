@@ -1,9 +1,11 @@
 class RoomsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_room, only: [ :show, :start, :finish ]
+  before_action :set_room, only: [ :show, :start, :finish, :destroy ]
 
   def index
     @rooms = Room.all
+    @active_rooms = Room.where.not(status: :finished)
+    @finished_rooms = Room.where(status: :finished) 
   end
 
   def show
@@ -35,6 +37,16 @@ class RoomsController < ApplicationController
       @room.finished!
     end
     redirect_to @room
+  end
+
+  def destroy
+    @room.destroy
+    respond_to do |format|
+      format.turbo_stream do
+        #TODO update room list
+      end
+      format.html { redirect_to rooms_path, notice: "Sala eliminada correctamente." }
+    end
   end
 
   private

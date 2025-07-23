@@ -1,7 +1,11 @@
 <%= turbo_stream_from "room_#{@room.id}" %>
-<h1>Sala: <%= @room.name %></h1>
-<p>Estado: <%= @room.status %></p>
+<div class="room-header">
+  <h1>Sala: <%= @room.name %></h1>
+  <p>Estado: <%= @room.status %></p>
 
+  <%= link_to "Volver a Salas", rooms_path %>  
+</div>
+<div class="status-panel">
 <% if @room.waiting? %>
   <%= button_to "Empezar partida", start_room_path(@room), method: :patch, data: { turbo_confirm: "Empezar partida?" } %>
 <% elsif @room.rolling_for_order? || @room.tiebreak_for_order? %>
@@ -16,8 +20,13 @@
   <% end %>
 <% elsif @room.playing? %>
   <%= button_to "Finalizar partida", finish_room_path(@room), method: :patch, data: {turbo_confirm: "Finalizar partida?" } %>
+<% elsif @room.finished? %>
+  <%= button_to "Eliminar sala", room_path(@room), method: :delete, data: { turbo_confirm: "Eliminar sala?" } %>
 <% end %>
 
+</div>
+
+<div class="players-list">
 <h2>Jugadores</h2>
 <div id="players">
 <%= render :partial => 'players_list', locals: { room: @room } %>
@@ -25,5 +34,8 @@
 <% unless @room.room_players.exists?(user_id: current_user.id) %>
   <%= button_to 'Unirme a esta sala', join_room_path(@room), method: :post %>
 <% end %>
+</div>
+
+
 
 <div>                                               <%= link_to "Volver a Salas", rooms_path %>     </div>

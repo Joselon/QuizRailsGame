@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  resources :rooms, only: [ :index, :show, :new, :create ] do
+  resources :rooms, only: [ :index, :show, :new, :create, :destroy ] do
     member do
       patch :start
       patch :finish

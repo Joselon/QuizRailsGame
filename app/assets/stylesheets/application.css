@@ -8,3 +8,43 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+/* Rooms styles */
+
+.room-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 2px solid #ccc;
+	margin-bottom: 1em;
+}
+
+.players-list {
+	display: flex;
+	gap: 1em;
+	flex-wrap: wrap;
+	margin-bottom: 1em;
+}
+
+.player-card {
+	padding: 0 5em 1em;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	background-color: #f7f7f7;
+}
+
+.player-card.active {
+	background-color: #d1f3d1;
+	font-weight: bold;
+}
+
+.question-box {
+	padding: 1em;
+	border: 2px dashed #888;
+	margin-bottom: 1em;
+}
+
+.media-content {
+	margin-top: 1em;
+}
+
