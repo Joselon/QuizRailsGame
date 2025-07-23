@@ -1,7 +1,7 @@
 <ul id="players-list">
   <% room.room_players.includes(:user).each do |rp| %>
   
-    <li class="player-item player-card <%= 'active' if player == @room.current_player %>">
+    <li class="player-item player-card <%= 'active' if rp == room.current_player %>">
      <span class="player-name"><%= rp.user.name %></span>
      <span class="player-score"> - Puntos: <%= rp.score %></span>
      <span class="player-turn"> - Turno: <%= rp.turn_order %> -</span>

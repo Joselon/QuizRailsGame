@@ -20,7 +20,7 @@
     <%# render "rooms/question", question: @room.current_question %>
     <%# render "rooms/answer_form", room_player: @room_player %>
   <% else %>
-    <h2>Turno de <%= @room.current_player.user.username %>. Espera tu turno…</h2>
+    <h2>Turno de <%# = @room.current_player.user.username %>. Espera tu turno…</h2>
   <% end %>
 </div>
 
@@ -45,8 +45,8 @@
       <%= render "rooms/question", question: @room.current_question %>
       <%= render "rooms/answer_form", room_player: @room_player %>
     <% else %>
-      <h2>Turno de <%= @room.current_player.user.username %></h2>
-      <%= render "rooms/question", question: @room.current_question %>
+      <h2>Turno de <%# = @room.current_player.user.username %></h2>
+      <%# = render "rooms/question", question: @room.current_question %>
     <% end %>
     <%= button_to "Finalizar partida", finish_room_path(@room), method: :patch, data: {turbo_confirm: "Finalizar partida?" } %>
   <% elsif @room.finished? %>
