@@ -3,7 +3,7 @@
   <h1>Sala: <%= @room.name %></h1>
   <%= link_to "Volver a Salas", rooms_path %>  
 </div>
-<div class="players-list">
+<div class="players">
   <h2>Jugadores</h2>
   <div id="players">
     <%= render :partial => 'players_list', locals: { room: @room } %>

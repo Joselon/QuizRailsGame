@@ -9,15 +9,17 @@ class RoomsController < ApplicationController
   end
 
   def show
-    Turbo::StreamsChannel.broadcast_replace_to(
+     respond_to do |format|
+      format.turbo_stream do
+        Turbo::StreamsChannel.broadcast_replace_to(
           "room_#{@room.id}",
           target: "status-panel",
-           partial: "rooms/status_panel",
+          partial: "rooms/status_panel",
           locals: { room: @room }
-    )
-    respond_to do |format|
-      format.turbo_stream { head :ok }
-      format.html { redirect_to @room }
+        )
+        head :ok
+      end
+      format.html
     end
   end
 

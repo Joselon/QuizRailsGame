@@ -12,7 +12,7 @@ class RoomPlayersController < ApplicationController
 
     Turbo::StreamsChannel.broadcast_replace_to(
           "room_#{room.id}",
-          target: "players-list",
+          target: "players",
            partial: "rooms/players_list",
           locals: { room: room }
     )
