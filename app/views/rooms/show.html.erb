@@ -26,31 +26,6 @@
 
 <div class="status-panel">
   <h3>Estado de la sala</h3>
-  <p class="status <%= @room.status %>"><%= @room.status.humanize  %></p>
-  
-  <% if @room.waiting? %>
-    <%= button_to "Empezar partida", start_room_path(@room), method: :patch, data: { turbo_confirm: "Empezar partida?" } %>
-  <% elsif @room.rolling_for_order? || @room.tiebreak_for_order? %>
-    <% if @room.tiebreak_for_order? %>
-          <p>🎲 Empate entre <%= @room.room_players.where.not(dice_roll: nil).map { |p| p.user.name }.join(", ") %>. Solo ellos vuelven a tirar.</p>
-    <% else %>
-      <% if @room.room_players.all? { |p| p.dice_roll.present? } %>
-        <p> El jugador <%= @room.room_players.find_by(turn_order: @room.current_turn).user.name %> empieza la partida.</p>
-      <% else %>
-        <p> ⏳ Esperando tiradas de los demas jugadores...</p>
-      <% end %>
-    <% end %>
-  <% elsif @room.playing? %>
-    <% if @room.current_player == current_user %>
-      <%= render "rooms/question", question: @room.current_question %>
-      <%= render "rooms/answer_form", room_player: @room_player %>
-    <% else %>
-      <h2>Turno de <%# = @room.current_player.user.username %></h2>
-      <%# = render "rooms/question", question: @room.current_question %>
-    <% end %>
-    <%= button_to "Finalizar partida", finish_room_path(@room), method: :patch, data: {turbo_confirm: "Finalizar partida?" } %>
-  <% elsif @room.finished? %>
-    <%= button_to "Eliminar sala", room_path(@room), method: :delete, data: { turbo_confirm: "Eliminar sala?" } %>
-  <% end %>
+ <%= render partial: "rooms/status_panel", locals: { room: @room } %>
 </div>
 

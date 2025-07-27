@@ -9,6 +9,16 @@ class RoomsController < ApplicationController
   end
 
   def show
+    Turbo::StreamsChannel.broadcast_replace_to(
+          "room_#{@room.id}",
+          target: "status-panel",
+           partial: "rooms/status_panel",
+          locals: { room: @room }
+    )
+    respond_to do |format|
+      format.turbo_stream { head :ok }
+      format.html { redirect_to @room }
+    end
   end
 
   def new
@@ -29,14 +39,32 @@ class RoomsController < ApplicationController
     if @room.waiting?
       @room.update(status: :rolling_for_order)
     end
-    redirect_to @room
+    Turbo::StreamsChannel.broadcast_replace_to(
+          "room_#{@room.id}",
+          target: "status-panel",
+           partial: "rooms/status_panel",
+          locals: { room: @room }
+    )
+    respond_to do |format|
+      format.turbo_stream { head :ok }
+      format.html { redirect_to @room }
+    end
   end
 
   def finish
     if @room.playing?
       @room.finished!
     end
-    redirect_to @room
+        Turbo::StreamsChannel.broadcast_replace_to(
+          "room_#{@room.id}",
+          target: "status-panel",
+           partial: "rooms/status_panel",
+          locals: { room: @room }
+    )
+    respond_to do |format|
+      format.turbo_stream { head :ok }
+      format.html { redirect_to @room }
+    end
   end
 
   def destroy
