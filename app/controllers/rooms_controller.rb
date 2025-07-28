@@ -9,18 +9,7 @@ class RoomsController < ApplicationController
   end
 
   def show
-     respond_to do |format|
-      format.turbo_stream do
-        Turbo::StreamsChannel.broadcast_replace_to(
-          "room_#{@room.id}",
-          target: "status-panel",
-          partial: "rooms/status_panel",
-          locals: { room: @room }
-        )
-        head :ok
-      end
-      format.html
-    end
+    # render show view
   end
 
   def new
@@ -41,11 +30,19 @@ class RoomsController < ApplicationController
     if @room.waiting?
       @room.update(status: :rolling_for_order)
     end
+    
     Turbo::StreamsChannel.broadcast_replace_to(
-          "room_#{@room.id}",
-          target: "status-panel",
-           partial: "rooms/status_panel",
-          locals: { room: @room }
+      "room_#{@room.id}",
+      target: "players",
+      partial: "rooms/players_list",
+      locals: { room: @room }
+    )
+
+    Turbo::StreamsChannel.broadcast_replace_to(
+      "room_#{@room.id}",
+      target: "status-panel",
+      partial: "rooms/status_panel",
+      locals: { room: @room }
     )
     respond_to do |format|
       format.turbo_stream { head :ok }
@@ -57,7 +54,7 @@ class RoomsController < ApplicationController
     if @room.playing?
       @room.finished!
     end
-        Turbo::StreamsChannel.broadcast_replace_to(
+    Turbo::StreamsChannel.broadcast_replace_to(
           "room_#{@room.id}",
           target: "status-panel",
            partial: "rooms/status_panel",
@@ -72,9 +69,6 @@ class RoomsController < ApplicationController
   def destroy
     @room.destroy
     respond_to do |format|
-      format.turbo_stream do
-        # TODO update room list
-      end
       format.html { redirect_to rooms_path, notice: "Sala eliminada correctamente." }
     end
   end
