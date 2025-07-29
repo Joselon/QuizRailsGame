@@ -2,6 +2,8 @@ class RoomsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_room, only: [ :show, :start, :finish, :destroy ]
 
+  include ActionView::RecordIdentifier
+
   def index
     @rooms = Room.all
     @active_rooms = Room.where.not(status: :finished)
@@ -30,7 +32,7 @@ class RoomsController < ApplicationController
     if @room.waiting?
       @room.update(status: :rolling_for_order)
     end
-    
+
     Turbo::StreamsChannel.broadcast_replace_to(
       "room_#{@room.id}",
       target: "players",
@@ -42,7 +44,7 @@ class RoomsController < ApplicationController
       "room_#{@room.id}",
       target: "status-panel",
       partial: "rooms/status_panel",
-      locals: { room: @room }
+      locals: { room: @room, current_user: current_user }
     )
     respond_to do |format|
       format.turbo_stream { head :ok }
@@ -54,12 +56,21 @@ class RoomsController < ApplicationController
     if @room.playing?
       @room.finished!
     end
+
     Turbo::StreamsChannel.broadcast_replace_to(
-          "room_#{@room.id}",
-          target: "status-panel",
-           partial: "rooms/status_panel",
-          locals: { room: @room }
+      "room_#{@room.id}",
+      target: "players",
+      partial: "rooms/players_list",
+      locals: { room: @room, current_user: current_user }
     )
+
+    Turbo::StreamsChannel.broadcast_replace_to(
+      "room_#{@room.id}",
+      target: "status-panel",
+      partial: "rooms/status_panel",
+      locals: { room: @room, current_user: current_user }
+    )
+
     respond_to do |format|
       format.turbo_stream { head :ok }
       format.html { redirect_to @room }
@@ -67,8 +78,22 @@ class RoomsController < ApplicationController
   end
 
   def destroy
+    Turbo::StreamsChannel.broadcast_remove_to(
+      "room_#{@room.id}",
+      target: dom_id(@room)
+    )
+
+    Turbo::StreamsChannel.broadcast_append_to(
+      "room_#{@room.id}",
+      target: "room_exits",
+      partial: "rooms/room_destroyed",
+      locals: { room: @room }
+    )
+
     @room.destroy
+
     respond_to do |format|
+      format.turbo_stream { head :ok }
       format.html { redirect_to rooms_path, notice: "Sala eliminada correctamente." }
     end
   end

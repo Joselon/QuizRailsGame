@@ -6,24 +6,26 @@
 <div class="players">
   <h2>Jugadores</h2>
   <div id="players">
-    <%= render :partial => 'players_list', locals: { room: @room } %>
+    <%= render :partial => 'players_list', locals: { room: @room, current_user: current_user } %>
   </div>
 </div>
 
+<% if @room.playing? %> 
 <div class="question-box">
   <% if @room.current_player == current_user %>
     <h2>Tu turno: responde a la siguiente pregunta</h2>
-    <%# render "rooms/question", question: @room.current_question %>
-    <%# render "rooms/answer_form", room_player: @room_player %>
+    <% render "rooms/question", question: @room.current_question %>
+    <% render "rooms/answer_form", room_player: @room_player %>
   <% else %>
-    <h2>Turno de <%# = @room.current_player.user.username %>. Espera tu turno…</h2>
+    <h2>Turno de <%= @room.current_player.user.name %>. Espera tu turno…</h2>
   <% end %>
 </div>
+<% end %>
 
 <div class="status-panel">
   <h3>Estado de la sala</h3>
   <div id="status-panel">
-    <%= render partial: "rooms/status_panel", locals: { room: @room } %>
+    <%= render partial: "rooms/status_panel", locals: { room: @room, current_user: current_user } %>
   </div>
 </div>
-
+<div id="room_exits"></div>
