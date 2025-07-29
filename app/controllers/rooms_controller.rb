@@ -35,7 +35,7 @@ class RoomsController < ApplicationController
       "room_#{@room.id}",
       target: "players",
       partial: "rooms/players_list",
-      locals: { room: @room }
+      locals: { room: @room, current_user: current_user }
     )
 
     Turbo::StreamsChannel.broadcast_replace_to(

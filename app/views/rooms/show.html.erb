@@ -8,10 +8,6 @@
   <div id="players">
     <%= render :partial => 'players_list', locals: { room: @room } %>
   </div>
-<br />
-<% unless @room.room_players.exists?(user_id: current_user.id) %>
-  <%= button_to 'Unirme a esta sala', join_room_path(@room), method: :post %>
-<% end %>
 </div>
 
 <div class="question-box">
@@ -26,6 +22,8 @@
 
 <div class="status-panel">
   <h3>Estado de la sala</h3>
- <%= render partial: "rooms/status_panel", locals: { room: @room } %>
+  <div id="status-panel">
+    <%= render partial: "rooms/status_panel", locals: { room: @room } %>
+  </div>
 </div>
 

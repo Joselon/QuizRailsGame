@@ -23,7 +23,9 @@
   </head>
 
   <body>
-    <% if current_user %> <%= button_to "Logout", destroy_user_session_path, method: :delete %> <% end %>
+    <% if current_user %>
+      <%= current_user.name %>
+      <%= button_to "Logout", destroy_user_session_path, method: :delete %> <% end %>
     <%= yield %>
   </body>
 </html>

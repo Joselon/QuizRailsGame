@@ -14,7 +14,7 @@ class RoomPlayersController < ApplicationController
           "room_#{room.id}",
           target: "players",
            partial: "rooms/players_list",
-          locals: { room: room }
+          locals: { room: room, current_user: current_user }
     )
 
     respond_to do |format|
@@ -34,13 +34,12 @@ class RoomPlayersController < ApplicationController
       "room_#{@room_player.room.id}",
       target: "players",
       partial: "rooms/players_list",
-      locals: { room: @room_player.room }
+      locals: { room: @room_player.room, current_user: current_user }
     )
 
     respond_to do |format|
-      format.js
-      format.html { redirect_to @room_player.room }
       format.turbo_stream { head :ok }
+      format.html { redirect_to @room_player.room }
     end
   end
 
