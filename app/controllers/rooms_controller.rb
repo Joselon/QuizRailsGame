@@ -83,17 +83,10 @@ class RoomsController < ApplicationController
       target: dom_id(@room)
     )
 
-    Turbo::StreamsChannel.broadcast_append_to(
-      "room_#{@room.id}",
-      target: "room_exits",
-      partial: "rooms/room_destroyed",
-      locals: { room: @room }
-    )
-
     @room.destroy
 
     respond_to do |format|
-      format.turbo_stream { head :ok }
+      format.turbo_stream { redirect_to rooms_path, status: :see_other }
       format.html { redirect_to rooms_path, notice: "Sala eliminada correctamente." }
     end
   end
