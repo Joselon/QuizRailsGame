@@ -30,8 +30,6 @@ class RoomPlayersController < ApplicationController
 
     DiceRollService.new(@room_player.room).roll_for(@room_player)
 
-    @room_player.reload
-
     Turbo::StreamsChannel.broadcast_replace_to(
       "room_#{@room_player.room.id}",
       target: "players",

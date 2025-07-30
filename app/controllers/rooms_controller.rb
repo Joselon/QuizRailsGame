@@ -99,5 +99,7 @@ class RoomsController < ApplicationController
 
   def set_room
     @room = Room.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to rooms_path, alert: "La sala ya no existe"
   end
 end
