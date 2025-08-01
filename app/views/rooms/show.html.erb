@@ -12,7 +12,7 @@
 
 <% if @room.playing? %> 
 <div class="question-box">
-  <% if @room.current_player == current_user %>
+  <% if @room.current_player.user_id == current_user.id %>
     <h2>Tu turno: responde a la siguiente pregunta</h2>
     <%# render "rooms/question", question: @room.current_question %>
     <%# render "rooms/answer_form", room_player: @room_player %>

@@ -16,9 +16,10 @@
       <div id="dice-result-<%= rp.id %>">
         <% if rp.dice_roll.present? %>
           Dado <%= rp.dice_roll %>
-      <% end %>
+        <% end %>
       </div>
-    <% end %></li>
+    <% end %>
+    </li>
   <% end %>
 </ul>
 <% if room.waiting? %>

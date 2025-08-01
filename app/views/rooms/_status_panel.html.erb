@@ -13,7 +13,7 @@
       <% end %>
     <% end %>
   <% elsif room.playing? %>
-    <% if room.current_player == current_user %>
+    <% if room.current_player.user_id == current_user.id %>
       <p> Tiempo restante: </p>
     <% else %>
       <h2>Turno de <%= room.current_player.user.name %></h2>

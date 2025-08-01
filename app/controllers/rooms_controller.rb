@@ -30,7 +30,7 @@ class RoomsController < ApplicationController
 
   def start
     if @room.waiting?
-      @room.update(status: :rolling_for_order)
+      @room.rolling_for_order!
     end
 
     Turbo::StreamsChannel.broadcast_replace_to(
