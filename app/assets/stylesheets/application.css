@@ -9,6 +9,12 @@
  * Consider organizing styles into separate files for maintainability.
  */
 
+/* New room form styles */
+
+.newroom-form div {
+	margin: 0.5rem;
+}
+
 /* Rooms styles */
 
 .room-header {

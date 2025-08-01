@@ -6,11 +6,13 @@
      <span class="player-score"> - Puntos: <%= rp.score %></span>
      <span class="player-turn"> - Turno: <%= rp.turn_order %> -</span>
     <% if room.rolling_for_order? || room.tiebreak_for_order? %>
+      <% if rp.user == current_user %>
       <%= button_to "Tirar dado",
         roll_dice_room_room_player_path(room, rp),
         method: :patch,
         remote: true,
         id: "roll-dice-btn-#{rp.id}" %>
+      <% end %>
       <div id="dice-result-<%= rp.id %>">
         <% if rp.dice_roll.present? %>
           Dado <%= rp.dice_roll %>
@@ -19,7 +21,9 @@
     <% end %></li>
   <% end %>
 </ul>
-<% unless room.room_players.exists?(user_id: current_user.id) %>
-  <%= button_to 'Unirme a esta sala', join_room_path(room), method: :post %>
+<% if room.waiting? %>
+  <% unless room.room_players.exists?(user_id: current_user.id) %>
+    <%= button_to 'Unirme a esta sala', join_room_path(room), method: :post %>
+  <% end %>
 <% end %>
 

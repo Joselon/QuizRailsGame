@@ -14,11 +14,9 @@
     <% end %>
   <% elsif room.playing? %>
     <% if room.current_player == current_user %>
-      <%= render "rooms/question", question: room.current_question %>
-      <%= render "rooms/answer_form", room_player: room_player %>
+      <p> Tiempo restante: </p>
     <% else %>
-      <h2>Turno de <%# = room.current_player.user.username %></h2>
-      <%# = render "rooms/question", question: room.current_question %>
+      <h2>Turno de <%= room.current_player.user.name %></h2>
     <% end %>
     <%= button_to "Finalizar partida", finish_room_path(room), method: :patch, data: {turbo_confirm: "Finalizar partida?" } %>
   <% elsif room.finished? %>

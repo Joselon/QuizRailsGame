@@ -14,8 +14,9 @@
 <div class="question-box">
   <% if @room.current_player == current_user %>
     <h2>Tu turno: responde a la siguiente pregunta</h2>
-    <% render "rooms/question", question: @room.current_question %>
-    <% render "rooms/answer_form", room_player: @room_player %>
+    <%# render "rooms/question", question: @room.current_question %>
+    <%# render "rooms/answer_form", room_player: @room_player %>
+    <p>Buscando Pregunta al azar de la dificultad seleccionada...</p>
   <% else %>
     <h2>Turno de <%= @room.current_player.user.name %>. Espera tu turno…</h2>
   <% end %>
@@ -28,4 +29,3 @@
     <%= render partial: "rooms/status_panel", locals: { room: @room, current_user: current_user } %>
   </div>
 </div>
-<div id="room_exits"></div>

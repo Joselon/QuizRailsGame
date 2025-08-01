@@ -1,6 +1,6 @@
 <% if room_player.user == current_user %>
-  <%# form_with model: [room_player, :answer], url: room_player_answer_path(room_player), local: false do |f| %>
-    <%# f.text_field :content, placeholder: "Tu respuesta…" %>
-    <%# f.submit "Responder" %>
-  <%# end %>
+  <% form_with model: [room_player, :answer], url: room_player_answer_path(room_player), local: false do |f| %>
+    <% f.text_field :content, placeholder: "Tu respuesta…" %>
+    <% f.submit "Responder" %>
+  <% end %>
 <% end %>
