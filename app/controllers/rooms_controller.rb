@@ -31,6 +31,7 @@ class RoomsController < ApplicationController
   def start
     if @room.waiting?
       @room.rolling_for_order!
+      @game = GameManager.for(@room)
     end
 
     Turbo::StreamsChannel.broadcast_replace_to(

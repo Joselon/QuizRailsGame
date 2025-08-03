@@ -24,29 +24,20 @@ class RoomPlayersController < ApplicationController
   end
 
   def roll_dice
-    unless @room_player.user == current_user
+    unless @room_player.user_id == current_user.id
       head :forbidden and return
     end
 
-    DiceRollService.new(@room_player.room).roll_for(@room_player)
+    @room = @room_player.room
 
-    Turbo::StreamsChannel.broadcast_replace_to(
-      "room_#{@room_player.room.id}",
-      target: "players",
-      partial: "rooms/players_list",
-      locals: { room: @room_player.room, current_user: current_user }
-    )
+    game = GameManager.for(@room)
+    game.roll_dice(current_user)
+    game.save
 
-    Turbo::StreamsChannel.broadcast_replace_to(
-      "room_#{@room_player.room.id}",
-      target: "status-panel",
-      partial: "rooms/status_panel",
-      locals: { room: @room_player.room, current_user: current_user }
-    )
-
+    game.broadcast_room_update(current_user)
     respond_to do |format|
       format.turbo_stream { head :ok }
-      format.html { redirect_to @room_player.room }
+      format.html { redirect_to game.room }
     end
   end
 

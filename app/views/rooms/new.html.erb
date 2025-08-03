@@ -1,20 +1,15 @@
 <h1>Crear una nueva sala</h1>
-<div class="newroom-form">
   <%= form_with model: @room, local: true do |form| %>
-    <div>
+    <div class="field">
       <%= form.label :name %>
       <%= form.text_field :name %>
-
     </div>
-
     <%= form.hidden_field :status, value: :waiting %>
     <%= form.submit 'Crear sala' %>
-
   <% end %>
-</div>
 
 <br/>
 
-<div>
+<div class="link">
   <%= link_to "Volver a Salas", rooms_path %>
 </div>

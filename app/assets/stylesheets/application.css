@@ -9,10 +9,22 @@
  * Consider organizing styles into separate files for maintainability.
  */
 
-/* New room form styles */
+/* New room and devise form styles */
 
-.newroom-form div {
+.field {
 	margin: 0.5rem;
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+	justify-content: space-around;
+  align-items: left;
+  margin: 0.5rem;
+}
+
+.link a {
+  text-decoration: none;
 }
 
 /* Rooms styles */
