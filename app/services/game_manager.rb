@@ -21,7 +21,7 @@ class GameManager
 
   def to_json
   {
-    room_id: @room.id,        
+    room_id: @room.id
   }.to_json
   end
 
