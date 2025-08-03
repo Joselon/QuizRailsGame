@@ -29,12 +29,12 @@ class RoomPlayersController < ApplicationController
     end
 
     @room = @room_player.room
-
     game = GameManager.for(@room)
+
     game.roll_dice(current_user)
     game.save
-
     game.broadcast_room_update(current_user)
+
     respond_to do |format|
       format.turbo_stream { head :ok }
       format.html { redirect_to game.room }

@@ -26,10 +26,10 @@
     <% current_player = room.room_players.find_by(user_id: current_user.id) %>
     <% unless current_player.dice_roll.present? %>
       <%= button_to "Tirar dado",
-                roll_dice_room_room_player_path(room, current_player),
-                method: :patch,
-                remote: true,
-                id: "roll-dice-btn-#{current_player.id}" %>
+              roll_dice_room_room_player_path(room, current_player),
+              method: :post,
+              remote: true,
+              id: "roll-dice-btn-#{current_player.id}" %>
     <% end %>
   <% end %>
 <% end %>

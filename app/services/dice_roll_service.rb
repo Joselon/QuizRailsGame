@@ -5,7 +5,7 @@ class DiceRollService
 
   def roll_for(player)
     dice = Dice.new
-    player.update(dice_roll: dice.roll)
+    player.update!(dice_roll: dice.roll)
     player.dice_roll
   end
 end

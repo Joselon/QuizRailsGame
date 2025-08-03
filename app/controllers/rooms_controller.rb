@@ -29,29 +29,19 @@ class RoomsController < ApplicationController
   end
 
   def start
-    if @room.waiting?
-      @room.rolling_for_order!
-      @game = GameManager.for(@room)
-    end
+  @game = GameManager.for(@room)
 
-    Turbo::StreamsChannel.broadcast_replace_to(
-      "room_#{@room.id}",
-      target: "players",
-      partial: "rooms/players_list",
-      locals: { room: @room, current_user: current_user }
-    )
-
-    Turbo::StreamsChannel.broadcast_replace_to(
-      "room_#{@room.id}",
-      target: "status-panel",
-      partial: "rooms/status_panel",
-      locals: { room: @room, current_user: current_user }
-    )
-    respond_to do |format|
-      format.turbo_stream { head :ok }
-      format.html { redirect_to @room }
-    end
+  if @room.waiting?
+    @game.start_turn_order_phase!
   end
+
+  @game.broadcast_room_update(current_user)
+
+  respond_to do |format|
+    format.turbo_stream { head :ok }
+    format.html { redirect_to @room }
+  end
+end
 
   def finish
     if @room.playing?

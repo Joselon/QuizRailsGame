@@ -14,17 +14,8 @@ module ActiveSupport
     fixtures :all
 
     # Add more helper methods to be used by all tests here...
-  end
-end
-
-class AppRedisClient
-  include Singleton
-
-  def initialize
-    @redis = Redis.new # Esto será un FakeRedis::Redis si se ha cargado
-  end
-
-  def redis
-    @redis
+    def setup
+      AppRedisClient.instance.redis.flushall
+    end
   end
 end

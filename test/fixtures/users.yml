@@ -3,7 +3,8 @@
 one:
   name: MyString1
   email: MyString1
-
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
 two:
   name: MyString2
   email: MyString2
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>

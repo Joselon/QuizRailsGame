@@ -6,23 +6,14 @@ class GameManager
     @dice_service = DiceRollService.new(room)
   end
 
-  def self.for(room)
-    data = AppRedisClient.instance.redis.get(redis_key(room.id))
-    data ? from_json(data) : new(room)
-  end
-
-  def save
-    AppRedisClient.instance.redis.set(self.class.redis_key(@room.id), Marshal.dump(self))
+  def self.for(room_or_id)
+    room_id = room_or_id.is_a?(Room) ? room_or_id.id : room_or_id
+    data = AppRedisClient.instance.redis.get(redis_key(room_id))
+    data ? from_json(data) : new(Room.find(room_id))
   end
 
   def self.redis_key(room_id)
     "gamemanager:room:#{room_id}"
-  end
-
-  def to_json
-  {
-    room_id: @room.id
-  }.to_json
   end
 
   def self.from_json(json_data)
@@ -30,8 +21,16 @@ class GameManager
     new(Room.find(data["room_id"]))
   end
 
+  def save
+    AppRedisClient.instance.redis.set(self.class.redis_key(@room.id), to_json)
+  end
+
+  def to_json(*_args)
+    { room_id: @room.id }.to_json
+  end
+
   def start_turn_order_phase!
-    @room.update(status: :rolling_for_order, current_turn: nil)
+    @room.update!(status: :rolling_for_order, current_turn: nil)
     @room.room_players.update_all(dice_roll: nil)
   end
 
@@ -45,7 +44,8 @@ class GameManager
     raise "Player not found" unless player
 
     dice_value = @dice_service.roll_for(player)
-    check_dice_results
+    evaluate_rolls_and_update_state
+    dice_value
   end
 
   def broadcast_room_update(current_user)
@@ -80,7 +80,7 @@ class GameManager
 
   private
 
-  def check_dice_results
+  def evaluate_rolls_and_update_state
     players = @room.room_players
     return unless players.all? { |p| p.dice_roll.present? }
 

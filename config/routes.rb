@@ -7,10 +7,8 @@ Rails.application.routes.draw do
       patch :finish
     end
 
-    resources :room_players, only: [] do
-      member do
-        patch :roll_dice
-      end
+    resources :room_players do
+        post :roll_dice, on: :member
     end
   end
   post "rooms/:id/join", to: "room_players#join", as: "join_room"
