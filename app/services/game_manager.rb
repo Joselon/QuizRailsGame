@@ -23,12 +23,12 @@ class GameManager
   {
     room_id: @room.id,        
   }.to_json
-end
+  end
 
-def self.from_json(json_data)
-  data = JSON.parse(json_data)
-  new(Room.find(data["room_id"]))
-end
+  def self.from_json(json_data)
+    data = JSON.parse(json_data)
+    new(Room.find(data["room_id"]))
+  end
 
   def start_turn_order_phase!
     @room.update(status: :rolling_for_order, current_turn: nil)
