@@ -8,7 +8,7 @@ class GameManager
 
   def self.for(room)
     data = AppRedisClient.instance.redis.get(redis_key(room.id))
-    data ? Marshal.load(data) : new(room)
+    data ? from_json(data) : new(room)
   end
 
   def save
@@ -18,6 +18,17 @@ class GameManager
   def self.redis_key(room_id)
     "gamemanager:room:#{room_id}"
   end
+
+  def to_json
+  {
+    room_id: @room.id,        
+  }.to_json
+end
+
+def self.from_json(json_data)
+  data = JSON.parse(json_data)
+  new(Room.find(data["room_id"]))
+end
 
   def start_turn_order_phase!
     @room.update(status: :rolling_for_order, current_turn: nil)
