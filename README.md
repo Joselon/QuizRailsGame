@@ -31,18 +31,33 @@ Hasta ahora se ha implementado:
 ## Requisitos
 
 - Ruby 3.2+ (usa [rvm](https://rvm.io/) o [rbenv](https://github.com/rbenv/rbenv) para gestionar versiones)
-- Rails 8.0+
 - PostgreSQL
 - Node.js y Yarn (para assets JS)
+- Redis
 
 ## Instalación y ejecución
+
+- Servicio postgres y redis iniciados
+
+(`service status postgres` y `redis-cli ping`)
 
 ```bash
 bundle install
 rails db:setup
 rails server -b 0.0.0.0 -p 3000
-ngrok...
 ```
+
+Rails 8.0+
+
+Optional:
+
+Install cloudflared and add to hosts at config/enviroments/development.rb
+
+`cloudflared tunnel --url http://localhost:3000`
+
+or
+
+`./start_dev.sh`
 
 * Database creation
 
@@ -55,6 +70,8 @@ Create with user postgres!
 * How to run the test suite
 
 `rails test`
+
+`bundle exec rubocop -a`
 
 ## Modelo de dominio
 
@@ -72,15 +89,7 @@ Create with user postgres!
 
  Añadir lógica de respuesta y puntuación por turno.
 
-### Mejoras en vistas y UX
- Terminar de mostrar animación del dado en todos los navegadores y controlar tamaño.
-
- Mensajes dinámicos según estado (esperando jugadores, empate, empieza X, etc.).
-
- Mejorar interfaz: mostrar claramente el jugador actual y siguiente.
-
 ### Persistencia y datos
- Añadir migración para dice_roll si no está.
 
  Añadir dificultad seleccionada a la Room.
 
@@ -98,7 +107,7 @@ Create with user postgres!
 ### Tiempo real y comunicación
  Añadir broadcast para cambios de estado de la sala (cuando se inicia la partida, etc.).
 
-(Ej. Turbo Streams en Rails 8. Considerar socket.io)
+(Ej. Turbo Streams en Rails 8. Considerar socket.io y ActionCable puro)
 
 ### Tests y calidad
  Escribir tests unitarios para GameManager, DiceRollService, QuestionSelector.
