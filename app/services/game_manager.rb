@@ -48,20 +48,36 @@ class GameManager
     dice_value
   end
 
-  def broadcast_room_update(current_user)
+  def broadcast_room_update(user)
     Turbo::StreamsChannel.broadcast_replace_to(
       "room_#{@room.id}",
       target: "players",
       partial: "rooms/players_list",
-      locals: { room: @room, current_user: current_user }
+      locals: { room: @room, current_user: user }
     )
 
     Turbo::StreamsChannel.broadcast_replace_to(
       "room_#{@room.id}",
       target: "status-panel",
       partial: "rooms/status_panel",
-      locals: { room: @room, current_user: current_user }
+      locals: { room: @room, current_user: user }
     )
+
+    Turbo::StreamsChannel.broadcast_replace_to(
+      "room_#{@room.id}",
+      target: "current_user_actions",
+      partial: "rooms/current_user_actions",
+      locals: { room: @room, current_user: user }
+    )
+
+    unless @room.playing?
+      Turbo::StreamsChannel.broadcast_replace_to(
+        "room_#{@room.id}",
+        target: "question-box",
+        partial: "rooms/question_box",
+        locals: { room: @room, current_user: user }
+      )
+    end
   end
 
   def next_turn!
@@ -90,7 +106,7 @@ class GameManager
     if top_players.size == 1
       @room.update!(current_turn: top_players.first.turn_order, status: :playing)
     else
-      (players - top_players).each { |p| p.update(dice_roll: nil) }
+      (players - top_players).each { |p| p.update!(dice_roll: nil) }
       @room.update!(status: :tiebreak_for_order)
     end
   end

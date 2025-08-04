@@ -17,19 +17,3 @@
     </li>
     <% end %>
 </ul>
-<% if room.waiting? %>
-  <% unless room.room_players.exists?(user_id: current_user.id) %>
-    <%= button_to 'Unirme a esta sala', join_room_path(room), method: :post %>
-  <% end %>
-<% elsif room.rolling_for_order? || room.tiebreak_for_order? %>
-  <% if room.room_players.exists?(user_id: current_user.id) %>
-    <% current_player = room.room_players.find_by(user_id: current_user.id) %>
-    <% unless current_player.dice_roll.present? %>
-      <%= button_to "Tirar dado",
-              roll_dice_room_room_player_path(room, current_player),
-              method: :post,
-              remote: true,
-              id: "roll-dice-btn-#{current_player.id}" %>
-    <% end %>
-  <% end %>
-<% end %>

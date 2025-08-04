@@ -9,18 +9,14 @@
     <%= render :partial => 'players_list', locals: { room: @room, current_user: current_user } %>
   </div>
 </div>
+<div class="current_user_actions" id="current_user_actions">
+  <%= render :partial => 'current_user_actions', locals: { room: @room, current_user: current_user } %>
+</div>
 
 <% if @room.playing? %> 
-<div class="question-box">
-  <% if @room.current_player.user == current_user %>
-    <h2>Tu turno: responde a la siguiente pregunta</h2>
-    <%# render "rooms/question", question: @room.current_question %>
-    <%# render "rooms/answer_form", room_player: @room_player %>
-    <p>Buscando Pregunta al azar de la dificultad seleccionada...</p>
-  <% else %>
-    <h2>Turno de <%= @room.current_player.user.name %>. Espera tu turno…</h2>
-  <% end %>
-</div>
+  <div id="question-box">
+    <%= render :partial => 'question_box', locals: { room: @room, current_user: current_user } %>
+  </div>
 <% end %>
 
 <div class="status-panel">

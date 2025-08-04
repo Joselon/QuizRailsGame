@@ -17,6 +17,13 @@ class RoomPlayersController < ApplicationController
           locals: { room: room, current_user: current_user }
     )
 
+    Turbo::StreamsChannel.broadcast_replace_to(
+          "room_#{room.id}",
+          target: "current_user_actions",
+           partial: "rooms/current_user_actions",
+          locals: { room: room, current_user: current_user }
+    )
+
     respond_to do |format|
       format.html { redirect_to room_path(room) }
       format.turbo_stream { head :ok }
@@ -24,7 +31,7 @@ class RoomPlayersController < ApplicationController
   end
 
   def roll_dice
-    unless @room_player.user_id == current_user.id
+    unless @room_player.user == current_user
       head :forbidden and return
     end
 
@@ -33,11 +40,12 @@ class RoomPlayersController < ApplicationController
 
     game.roll_dice(current_user)
     game.save
+
     game.broadcast_room_update(current_user)
 
     respond_to do |format|
       format.turbo_stream { head :ok }
-      format.html { redirect_to game.room }
+      format.html { redirect_to @room }
     end
   end
 
