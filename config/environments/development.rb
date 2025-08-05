@@ -1,7 +1,7 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  config.hosts << "https://firewire-original-watched-strong.trycloudflare.com"
+  config.hosts << ENV.fetch("TUNNEL_URL", "default.localhost")
 
   # Settings specified here will take precedence over those in config/application.rb.
 

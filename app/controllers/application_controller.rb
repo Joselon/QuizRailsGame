@@ -40,9 +40,9 @@ class ApplicationController < ActionController::Base
     redis = AppRedisClient.instance.redis
     previously_online = redis.exists(user_key)
 
-    redis.setex(user_key, 10.minutes.to_i, now.to_s)
+    redis.setex(user_key, 5.minutes.to_i, now.to_s)
 
-    if current_user.last_seen_at.nil? || current_user.last_seen_at < 5.minutes.ago
+    if current_user.last_seen_at.nil? || current_user.last_seen_at < 1.minutes.ago
       current_user.update_column(:last_seen_at, now)
     end
 
