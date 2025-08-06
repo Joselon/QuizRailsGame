@@ -108,7 +108,7 @@ class GameManager
     if top_players.size == 1
       @room.update!(current_turn: top_players.first.turn_order, status: :playing)
     else
-      (players - top_players).each { |p| p.update!(dice_roll: nil) }
+      players.each { |p| p.update!(dice_roll: nil) }
       @room.update!(status: :tiebreak_for_order)
     end
   end
