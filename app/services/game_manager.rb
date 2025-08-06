@@ -68,7 +68,7 @@ class GameManager
         player.user,
         target: "current_user_actions",
         partial: "rooms/current_user_actions",
-        locals: { room: @room, room_player: player, current_user: user }
+        locals: { room: @room, room_player: player, current_user: player.user }
         )
 
       unless @room.playing?
@@ -76,7 +76,7 @@ class GameManager
           player.user,
           target: "question-box",
           partial: "rooms/question_box",
-          locals: { room: @room, room_player: player, current_user: user }
+          locals: { room: @room, room_player: player, current_user: player.user }
           )
       end
     end
