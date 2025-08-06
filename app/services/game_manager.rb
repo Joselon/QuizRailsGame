@@ -53,30 +53,32 @@ class GameManager
       "room_#{@room.id}",
       target: "players",
       partial: "rooms/players_list",
-      locals: { room: @room, current_user: user }
+      locals: { room: @room }
     )
 
-    Turbo::StreamsChannel.broadcast_replace_to(
-      "room_#{@room.id}",
-      target: "status-panel",
-      partial: "rooms/status_panel",
-      locals: { room: @room, current_user: user }
-    )
-
-    Turbo::StreamsChannel.broadcast_replace_to(
-      "room_#{@room.id}",
-      target: "current_user_actions",
-      partial: "rooms/current_user_actions",
-      locals: { room: @room, current_user: user }
-    )
-
-    unless @room.playing?
+    @room.room_players.each do |player|
       Turbo::StreamsChannel.broadcast_replace_to(
-        "room_#{@room.id}",
-        target: "question-box",
-        partial: "rooms/question_box",
-        locals: { room: @room, current_user: user }
-      )
+        player.user,
+        target: "status-panel",
+        partial: "rooms/status_panel",
+        locals: { room: @room, room_player: player, current_user: player.user }
+       )
+
+      Turbo::StreamsChannel.broadcast_replace_to(
+        player.user,
+        target: "current_user_actions",
+        partial: "rooms/current_user_actions",
+        locals: { room: @room, room_player: player, current_user: user }
+        )
+
+      unless @room.playing?
+        Turbo::StreamsChannel.broadcast_replace_to(
+          player.user,
+          target: "question-box",
+          partial: "rooms/question_box",
+          locals: { room: @room, room_player: player, current_user: user }
+          )
+      end
     end
   end
 

@@ -1,4 +1,5 @@
 <%= turbo_stream_from "room_#{@room.id}" %>
+<%= turbo_stream_from current_user %>
 <div class="room-header">
   <h1>Sala: <%= @room.name %></h1>
   <%= link_to "Volver a Salas", rooms_path %>  
@@ -6,16 +7,16 @@
 <div class="players">
   <h2>Jugadores</h2>
   <div id="players">
-    <%= render :partial => 'players_list', locals: { room: @room, current_user: current_user } %>
+    <%= render :partial => 'players_list', locals: { room: @room } %>
   </div>
 </div>
 <div class="current_user_actions" id="current_user_actions">
-  <%= render :partial => 'current_user_actions', locals: { room: @room, current_user: current_user } %>
+  <%= render :partial => 'current_user_actions', locals: { room: @room, room_player: @room.room_players.find_by(user: current_user) } %>
 </div>
 
 <% if @room.playing? %> 
   <div id="question-box">
-    <%= render :partial => 'question_box', locals: { room: @room, current_user: current_user } %>
+    <%= render :partial => 'question_box', locals: { room: @room, room_player: @room.room_players.find_by(user: current_user) } %>
   </div>
 <% end %>
 

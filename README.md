@@ -30,7 +30,7 @@ Hasta ahora se ha implementado:
 
 ## Requisitos
 
-- Ruby 3.2+ (usa [rvm](https://rvm.io/) o [rbenv](https://github.com/rbenv/rbenv) para gestionar versiones)
+- Ruby 3.2.4 (usa [rvm](https://rvm.io/) o [rbenv](https://github.com/rbenv/rbenv) para gestionar versiones)
 - PostgreSQL
 - Node.js y Yarn (para assets JS)
 - Redis
