@@ -29,22 +29,11 @@ class GameManager
     { room_id: @room.id }.to_json
   end
 
-  def start_turn_order_phase!
-    @room.update!(status: :rolling_for_order, current_turn: nil)
-    @room.room_players.update_all(dice_roll: nil)
-  end
-
-  def start_tiebreak_phase!
-    @room.update(status: :tiebreak_for_order)
-    # TODO:clean dice rest of players
-  end
-
   def roll_dice(user)
     player = @room.room_players.find_by(user:)
     raise "Player not found" unless player
 
     dice_value = @dice_service.roll_for(player)
-    evaluate_rolls_and_update_state
     dice_value
   end
 
@@ -96,20 +85,22 @@ class GameManager
     @room.room_players.all? { |p| p.dice_roll.present? } && @room.status != "tiebreak_for_order"
   end
 
-  private
+  def start_turn_order_phase!
+    @room.update!(status: :rolling_for_order, current_turn: nil)
+    @room.room_players.update_all(dice_roll: nil)
+  end
 
-  def evaluate_rolls_and_update_state
-    players = @room.room_players
-    return unless players.all? { |p| p.dice_roll.present? }
+  def start_tiebreak_phase!(top_players)
+    (@room.room_players - top_players).each { |p| p.update!(dice_roll: nil) }
+    @room.update!(status: :tiebreak_for_order)
+  end
 
-    max_value = players.map(&:dice_roll).max
-    top_players = players.select { |p| p.dice_roll == max_value }
+  def start_playing_phase!(top_players)
+    @room.update!(current_turn: top_players.first.turn_order, status: :playing)
+    @room.room_players.update_all(dice_roll: nil)
+  end
 
-    if top_players.size == 1
-      @room.update!(current_turn: top_players.first.turn_order, status: :playing)
-    else
-      players.each { |p| p.update!(dice_roll: nil) }
-      @room.update!(status: :tiebreak_for_order)
-    end
+  def finished!
+    @room.finished!
   end
 end

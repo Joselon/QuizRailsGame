@@ -3,11 +3,11 @@
       <%= button_to 'Unirme a esta sala', join_room_path(room), method: :post %>
     <% end %>
 <% elsif room.rolling_for_order? || room.tiebreak_for_order? %>
-  <% if room_player && !room_player.dice_roll.present? %>
-    <%= button_to "Tirar dado",
-      roll_dice_room_room_player_path(room.id, room_player.id),
-      method: :post,
-      remote: true,
-      id: "roll-dice-btn-#{room_player.id}" %> 
-   <% end %>
+    <% if room_player && !room_player.dice_roll.present? %>
+      <%= button_to "Tirar dado",
+        roll_dice_room_room_player_path(room.id, room_player.id),
+        method: :post,
+        remote: true,
+        id: "roll-dice-btn-#{room_player.id}" %> 
+    <% end %>
  <% end %>

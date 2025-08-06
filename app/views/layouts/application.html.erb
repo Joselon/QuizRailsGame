@@ -27,6 +27,7 @@
       <turbo-frame id="online_users">
         <%= render "online_users/count" %>
       </turbo-frame>
+      <%= current_user.name %>
       <%= button_to "Logout", destroy_user_session_path, method: :delete %> <% end %>
     <%= yield %>
   </body>
