@@ -103,4 +103,20 @@ class GameManager
   def finished!
     @room.finished!
   end
+  
+  private
+
+  def evaluate_rolls_and_update_state
+    players = @room.room_players
+    return unless players.all? { |p| p.dice_roll.present? }
+
+    max_value = players.map(&:dice_roll).max
+    top_players = players.select { |p| p.dice_roll == max_value }
+
+    if top_players.size == 1
+      start_playing_phase!(top_players)
+    else
+      start_tiebreak_phase!(top_players)
+    end
+  end
 end

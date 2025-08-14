@@ -40,7 +40,7 @@ class RoomPlayersController < ApplicationController
 
     game.roll_dice(current_user)
     game.save
-    evaluate_rolls_and_update_state(game)
+    game.evaluate_rolls_and_update_state
     game.broadcast_room_update(current_user)
 
     respond_to do |format|
@@ -53,20 +53,5 @@ class RoomPlayersController < ApplicationController
 
   def set_room_player
     @room_player = RoomPlayer.find(params[:id])
-  end
-    private
-
-  def evaluate_rolls_and_update_state(game)
-    players = game.room.room_players
-    return unless players.all? { |p| p.dice_roll.present? }
-
-    max_value = players.map(&:dice_roll).max
-    top_players = players.select { |p| p.dice_roll == max_value }
-
-    if top_players.size == 1
-      game.start_playing_phase!(top_players)
-    else
-      game.start_tiebreak_phase!(top_players)
-    end
   end
 end
